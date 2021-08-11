@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="initial-scale=1">
+	<link rel="stylesheet" href="css/vanilla.css">
+	<link rel="stylesheet" href="css/index.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			const serialize_form = form => JSON.stringify(
+				Array.from(new FormData(form).entries())
+					.reduce((m, [ key, value ]) => Object.assign(m, { [key]: value }), {})
+				);
+
+			$('#signupForm').on('submit', function(event) {
+				event.preventDefault();
+				const json = serialize_form(this);
+				console.log(json);
+				$.ajax({
+					type: 'POST',
+					url: 'http://localhost:8000/api/save-signup',
+					// dataType: 'json',
+					data: json,
+					contentType: 'application/json',
+					error: function(xhr, status, error) {
+						// alert("error " + status + " " + xhr.responseText);
+						$('.msgBox').html(`Error ${status} ${error}`)
+						$('.msgBox').removeClass('msgBoxOk');
+						$('.msgBox').addClass('msgBoxFail');
+						$('.msgBox').show();
+					},
+					success: function(data) {
+						$('.msgBox').html(`Sign-up successful`)
+						$('.msgBox').removeClass('msgBoxFail');
+						$('.msgBox').addClass('msgBoxOk');
+						$('.msgBox').show();
+					}
+				});
+				return false;
+			});
+		});
+		
+	</script>
+</head>
+
+<body class="vanilla">
+	<header>
+		<h1>Exciting Tech Event</h1>
+	</header>
+	<section>
+		<section>
+			<section>
+				<h4 class="comingsoonHeader moveLeftRigh">COMING Real SOON</h4>
+			</section>
+			<article>
+				<h3>Exciting Tech Event is coming soon!</h3>
+				<h5>Blockchain and crypto economics for beginners </h5>
+				<h6>29 Aug 2021 (Sunday) 3PM - 5PM</h6>
+				<blockquote>
+					<p> Play to Earn NFT Games </p>
+					<p> Real Wold Use Case Showcase </p>
+				</blockquote>
+
+			</article>
+			<hr>
+			<section>
+				<form class="vanilla" id="signupForm">
+					<h5 class="blinkText">Sign-up HERE!</h5>
+					<div>
+						<h5 class="msgBox"></h5>
+					</div>
+					<div>
+						<label class="small-width" for="username">Name:</label>
+						<input class="input-limit" type="text" placeholder="Enter Your Name" name="username" required>
+					</div>
+					<div>
+						<label class="small-width" for="email">Email:</label>
+						<input class="input-limit" type="text" placeholder="Enter Email" name="email" required>
+					</div>
+					
+						<p class="agreeCls">By signing up, you agree to our</p>
+						<a class="termCls" href="#" style="color:rgb(53, 60, 66)">Terms & Privacy</a>
+					
+					<div>
+						<input type="submit" value="Sign Up" id="signupSubmit"/>
+					</div>
+				</form>
+
+			</section>
+		</section>
+	</section>
+
+
+</body>
+
+</html>
