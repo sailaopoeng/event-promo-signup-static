@@ -28,6 +28,7 @@
 				$.ajax({
 					type: 'POST',
 					url: 'https://cors-everywhere-me.herokuapp.com/http://ec2-3-0-249-216.ap-southeast-1.compute.amazonaws.com/api/save-signup',
+					// url: 'http://localhost:8000/api/save-signup',
 					// dataType: 'json',
 					data: json,
 					contentType: 'application/json',
@@ -49,6 +50,7 @@
 
 		function onSuccessSubmit(data){
 			callbackMessageShow(`Sign-up successful`, 'msgBoxFail', 'msgBoxOk');
+			$('.input-limit').val('');
 		}
 
 		function callbackMessageShow(msg, removeClassName, addClassName){
