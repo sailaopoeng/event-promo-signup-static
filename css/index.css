@@ -317,15 +317,21 @@ blockquote cite:before {
 
 .msgBox {
 	display: none;
-	color: white;
 	font-weight: bold !important;
 	padding: 1%;
 }
 
 .msgBoxOk {
+	color: white;
 	background-color: green;
 }
 
 .msgBoxFail {
+	color: white;
 	background-color: red;
+}
+
+.disableSubmitBtn {
+	opacity: 0.2;
+	pointer-events: none;
 }

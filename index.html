@@ -14,9 +14,17 @@
 				);
 
 			$('#signupForm').on('submit', function(event) {
+
+				$('#signupSubmit').prop('disabled', true);
+				$('#signupSubmit').addClass('disableSubmitBtn');
+
 				event.preventDefault();
 				const json = serialize_form(this);
-				console.log(json);
+				// console.log(json);
+				$('.msgBox').html(`Signing up ... Please wait...`)
+				$('.msgBox').removeClass('msgBoxOk');
+				$('.msgBox').removeClass('msgBoxFail');
+				$('.msgBox').show();
 				$.ajax({
 					type: 'POST',
 					url: 'http://ec2-3-0-249-216.ap-southeast-1.compute.amazonaws.com/api/save-signup',
@@ -24,22 +32,37 @@
 					data: json,
 					contentType: 'application/json',
 					error: function(xhr, status, error) {
-						// alert("error " + status + " " + xhr.responseText);
-						$('.msgBox').html(`Error ${status} ${error}`)
-						$('.msgBox').removeClass('msgBoxOk');
-						$('.msgBox').addClass('msgBoxFail');
-						$('.msgBox').show();
+						// alert("error " + status + " " + );
+						onErrorSubmit(xhr, status, error)
 					},
 					success: function(data) {
-						$('.msgBox').html(`Sign-up successful`)
-						$('.msgBox').removeClass('msgBoxFail');
-						$('.msgBox').addClass('msgBoxOk');
-						$('.msgBox').show();
+						onSuccessSubmit(data);
 					}
 				});
 				return false;
 			});
 		});
+
+		function onErrorSubmit(xhr, status, error){
+			callbackMessageShow(`Error ${status} ${error} ${xhr.responseText ? xhr.responseText: ''}`, 'msgBoxOk', 'msgBoxFail');
+		}
+
+		function onSuccessSubmit(data){
+			callbackMessageShow(`Sign-up successful`, 'msgBoxFail', 'msgBoxOk');
+		}
+
+		function callbackMessageShow(msg, removeClassName, addClassName){
+			$('.msgBox').html(msg)
+			$('.msgBox').removeClass(removeClassName);
+			$('.msgBox').addClass(addClassName);
+			afterCallback();	
+		}
+
+		function afterCallback(){
+			$('.msgBox').show();
+			$('#signupSubmit').prop('disabled', false);
+			$('#signupSubmit').removeClass('disableSubmitBtn');
+		}
 		
 	</script>
 </head>
@@ -76,7 +99,7 @@
 					</div>
 					<div>
 						<label class="small-width" for="email">Email:</label>
-						<input class="input-limit" type="text" placeholder="Enter Email" name="email" required>
+						<input class="input-limit" type="email" placeholder="Enter Email" name="email" required>
 					</div>
 					
 						<p class="agreeCls">By signing up, you agree to our</p>
